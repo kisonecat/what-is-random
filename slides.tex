@@ -1,0 +1,358 @@
+\documentclass[14pt,aspectratio=169]{beamer}
+
+\author{Jim Fowler (\texttt{@kisonecat})\\ Department of Mathematics \\ The Ohio State University}
+\date{April 6, 2017}
+\title{What is random?}
+
+\definecolor{ccgray}{HTML}{a7b1a6}
+
+\usepackage{calc}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{pgf}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{latexsym}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{pdfpages}
+
+
+\makeatletter
+\define@key{beamerframe}{nofills}[true]{% top
+  \beamer@frametopskip=0pt\relax%
+  \beamer@framebottomskip=0pt\relax%
+  \beamer@frametopskipautobreak=\beamer@frametopskip\relax%
+  \beamer@framebottomskipautobreak=\beamer@framebottomskip\relax%
+  \def\beamer@initfirstlineunskip{%
+    \def\beamer@firstlineitemizeunskip{%
+      \vskip-\partopsep\vskip-\topsep\vskip-\parskip%
+      \global\let\beamer@firstlineitemizeunskip=\relax}%
+    \everypar{\global\let\beamer@firstlineitemizeunskip=\relax}}
+}
+\makeatother
+
+\setbeamertemplate{navigation symbols}{}
+
+\begin{document}
+
+\begin{frame}
+\maketitle
+\end{frame}
+
+%\begin{frame}
+  %BADBAD
+  %Demonstration of humans failing to be random
+  %Coin Flips
+%\end{frame}
+
+\begin{frame}
+  \frametitle{Deterministic ``random'' number generators}
+
+  \large
+
+  True random numbers take a long time to generate.
+
+  \vfill
+
+  Using a deterministic procedure \\
+  \quad to produce pseudo-random numbers\\
+  \quad is often good enough.
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Not all that random}
+
+  \url{http://go.osu.edu/whammy}
+  %\url{https://youtu.be/UzggoA4lLwk?t=24m29s
+
+  \url{http://go.osu.edu/casino}
+  %\url{https://www.wired.com/2017/02/russians-engineer-brilliant-slot-machine-cheat-casinos-no-fix/}
+\end{frame}
+
+\begin{frame}
+\frametitle{\normalsize Dual\_EC\_DRBG (Dual Elliptic Curve Deterministic Random Bit Generator)}
+
+    Endorsed by the National Institute of Standards and Technology \\
+    \quad in June 2006.
+
+    \pause\vfill
+
+    NSA pays \$10 million to RSA Security \\
+    \quad to make Dual\_EC\_DRBG the default in their products.
+
+    \pause\vfill
+
+    In 2013, \textit{The New York Times} reports \\
+    \quad there is a backdoor in Dual\_EC\_DRBG.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\begin{lstlisting}[language=Python]
+# I rolled a pair of dice to get this
+def random_number():
+  return 7;
+\end{lstlisting}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+  \frametitle{Question 1: Is it random?}
+
+  \vfill
+  
+  $12121212121212121212121212121212121212121212121212121212\ldots$
+
+  \vfill
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+  \frametitle{Question 2: Is it random?}
+
+  \vfill
+
+  \newcommand{\stackcenter}[2]{\parbox{\widthof{#2}}{\begin{center}\uncover<2->{\textcolor{gray}{#1}}\\#2\end{center}}}
+  $\stackcenter{1}{1}\stackcenter{2}{22}\stackcenter{2}{11}\stackcenter{1}{2}\stackcenter{1}{1}\stackcenter{2}{22}\stackcenter{1}{1}\stackcenter{2}{22}\stackcenter{2}{11}\stackcenter{1}{2}\stackcenter{2}{11}\stackcenter{2}{22}\stackcenter{1}{1}\stackcenter{1}{2}\stackcenter{2}{11}\stackcenter{1}{2}\stackcenter{1}{1}\stackcenter{2}{22}\stackcenter{2}{11}\stackcenter{1}{2}\stackcenter{2}{11}\stackcenter{1}{2}\stackcenter{1}{1}\stackcenter{2}{22}\stackcenter{1}{1}\stackcenter{2}{22}\stackcenter{2}{11}\stackcenter{1}{2}\stackcenter{1}{1}\stackcenter{2}{22}\stackcenter{1}{1}\stackcenter{1}{2}\stackcenter{2}{11}\stackcenter{1}{2}\stackcenter{2}{11}\stackcenter{2}{22}\stackcenter{1}{1}\stackcenter{\raisebox{0in}[10pt]{\ldots}}{\ldots}$
+%\raisebox{-10pt}{\ldots}$
+
+  \vfill
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+  \frametitle{Question 3: Is it random?}
+
+  \vfill
+  
+  \alt<2->{11\only<3->{.}001001000011111101101010100010001000010110100011\uncover<4->{$_2$} \uncover<5->{$\approx \pi$}}{22112112111122222212212121211121112111121221211122}
+
+  \vfill
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+  \frametitle{Middle-square method \hfill\textcolor{gray}{(John von Neumann, 1949)}}
+
+  \begin{columns}
+    \begin{column}{0.4\textwidth}
+      \alert<2,5,8>{Pick an $n$ digit number}
+
+      \alert<3,6,9>{Square it to get $2n$ digits}
+
+      \alert<4,7,10>{Take the middle $n$ digits}
+    \end{column}
+    \begin{column}{0.6\textwidth}
+      \uncover<2->{$\mathbf{3456}$} \\
+      \quad\uncover<3->{$\mapsto 11943936$} \\
+      \quad\uncover<4->{$\mapsto \phantom{11}9439\phantom{36}$}
+
+      \uncover<5->{$\mathbf{9439}$} \\
+      \quad\uncover<6->{$\mapsto 89094721$} \\
+      \quad\uncover<7->{$\mapsto \phantom{11}0947\phantom{36}$}
+
+      \uncover<8->{$\mathbf{0947}$} \\
+      \quad\uncover<9->{$\mapsto 00896809$} \\
+      \quad\uncover<10->{$\mapsto \phantom{11}8968\phantom{36}$}
+    \end{column}
+  \end{columns}
+
+  \vfill
+
+  \uncover<2->{3456,} \uncover<5->{9439,} \uncover<8->{0947,} \uncover<11->{4250,} \uncover<12->{0625,} \uncover<13->{3906,} \uncover<14->{2568,} \uncover<15->{5946,} \uncover<16->{3549,}  \uncover<17->{5954, \ldots}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+  \frametitle{Middle-square method \hfill\textcolor{gray}{(John von Neumann, 1949)}}
+
+  \begin{columns}
+    \begin{column}{0.4\textwidth}
+      \alert<2,5,8>{Pick an $n$ digit number}
+
+      \alert<3,6,9>{Square it to get $2n$ digits}
+
+      \alert<4,7,10>{Take the middle $n$ digits}
+    \end{column}
+    \begin{column}{0.6\textwidth}
+      \uncover<2->{$\mathbf{431166}$} \\
+      \quad\uncover<3->{$\mapsto 185904119556$} \\
+      \quad\uncover<4->{$\mapsto \phantom{185}904119\phantom{556}$}
+
+      \uncover<5->{$\mathbf{904119}$} \\
+      \quad\uncover<6->{$\mapsto 817431166161$} \\
+      \quad\uncover<7->{$\mapsto \phantom{111}431166\phantom{316}$}
+
+      \uncover<8->{$\mathbf{431166}$} \\
+      \quad\uncover<9->{$\mapsto 185904119556$} \\
+      \quad\uncover<10->{$\mapsto \phantom{185}904119\phantom{556}$}
+    \end{column}
+  \end{columns}
+
+  \vfill
+
+  \uncover<2->{431166,} \uncover<5->{904119,} \uncover<8->{431166,} \uncover<11->{904119,} \uncover<12->{431166,} \uncover<13->{904119,} \uncover<14->{431166, \ldots}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+
+  Don't use a ``random'' procedure to produce random numbers.
+
+  \vfill\pause
+
+  ``Random number generation is too important to be left to chance.'' \\
+  \hfill --- Robert R.~Coveyou, 1970
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{RANDU from IBM System/360}
+
+  \begin{columns}
+    \begin{column}{0.4\textwidth}
+      \alert<2,5,8>{Pick a number}
+
+      \alert<3,6,9>{Multiply by 65539}
+
+      \alert<4,7,10>{Remainder dividing by $2^{31}$}
+    \end{column}
+    \begin{column}{0.6\textwidth}
+      \uncover<2->{$\mathbf{171214425}$} \\
+      \quad\uncover<3->{$\mapsto 11221222200075$} \\
+      \quad\uncover<4->{$\mapsto 620139275$}
+
+      \uncover<5->{$\mathbf{620139275}$} \\
+      \quad\uncover<6->{$\mapsto 40643307944225$} \\
+      \quad\uncover<7->{$\mapsto 32422177$} \\
+
+      \uncover<8->{$\mathbf{32422177}$} \\
+      \quad\uncover<9->{$\mapsto 2124917058403$} \\
+      \quad\uncover<10->{$\mapsto 1055730531$} \\
+    \end{column}
+  \end{columns}
+
+  \vfill
+  \small
+
+  \begin{center}
+    \uncover<2->{17121442\alert<14->{5},} \uncover<5->{62013927\alert<14->{5},} \uncover<8->{3242217\alert<14->{7},} \uncover<11->{105573053\alert<14->{1},} \uncover<12->{174761629\alert<14->{7},} \uncover<13->{98412300\alert<14->{3}, \ldots}
+\end{center}
+
+\begin{center}
+  \uncover<15->{\textit{Only odd numbers!}}
+\end{center}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{What does ``random'' mean?}
+
+  The string
+  \[12121212121212121212121212121212121212121212121212\]
+  is not random because it has a ``short description,'' \\
+  \pause\quad namely \\
+  ``repeat 12 twenty-five times.''
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{What does ``random'' mean?}
+
+  The string
+  \[22221121112212222122212112121222221211212221121221\]
+  \pause probably doesn't have a description \\
+  \quad shorter than itself.
+
+  \pause\vfill
+
+  For a string $s$, the \textbf{Kolmogorov complexity} $K(s)$ \\
+  \quad is the length of the shortest description of $s$.
+
+  \pause\vfill
+
+  $K(s) \leq \mbox{constant} + \mbox{length of $s$}$
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Chaitin's Incompleteness theorem}
+  
+  There is a constant $L$, \\
+  \quad so that there does not exist a string $s$ \\
+  \quad for which the statement ``$K(s) \geq L$'' can be proved.
+  
+  \pause\vfill\hrule\vfill
+
+  There is a large number $L$ \\
+  \quad so that we can't prove it takes at least $L$ bits \\
+  \quad to describe a particular string, \\
+  and yet this is true of most strings.
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Proof \textcolor{gray}{(which I learned from John Baez)}}
+
+  Set $L$ so big that $U + \log_2 L + K < L$, where
+
+  $U$ is the length of the computer program \\
+  \quad which accepts as input a number $i$ \\
+  \quad and then searches through proofs \\
+  \quad until it finds a proof that some string $s$ has $K(s) > i$, \\
+  \quad\quad and then it prints $s$.
+
+  $\log_2 L$ is the number of bits needed to describe $L$.
+
+  $K$ is the length of the extra code to run the program with $i = L$.
+
+  \pause\vfill
+
+  If there is a string $s$ for which ``$K(s) \geq L$'' can be proved, \\
+  \quad then running the program with $i = L$ would print out $s$, \\
+  \pause\quad but that program is a \textbf{shorter} description of $s$.
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{The cost of incompleteness}
+
+
+  If ``random'' is defined to mean ``incompressible,'' \\
+  \quad then we can't certify randomness.  \hfill\textcolor{gray}{(Christopher P. Porter)}
+
+  \vfill\pause
+
+  We can't only say that something \textit{isn't} random, \\
+  \quad and never that something \textit{is.}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% THANK YOU
+ \begin{frame}[label=thanks,nofills]
+   \vfill
+   \begin{center}
+   \Huge
+    \scalebox{1.5}{\textbf{Thank You}}
+    \large
+    \texttt{http://github.com/kisonecat/what-is-random}
+   \end{center}
+   \vfill
+   \vfill
+   \includegraphics[width=1in]{images/cc-logo.pdf}\hfill\footnotesize\scalebox{0.75}{\textcolor{ccgray}{Licensed for reuse under a Creative Commons BY-SA License}}
+   \null
+   %\vspace{12pt}
+   \null
+ \end{frame}
+
+
+\end{document}
+
